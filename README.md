@@ -1,36 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shortyfy – Advanced URL Shortener
 
-## Getting Started
+Shortyfy is a **full-stack advanced URL shortener** application that goes beyond basic link shortening. It provides robust authentication, email verification, custom links, analytics, and modern UI for a seamless user experience.
 
-First, run the development server:
+---
+
+## 🚀 Features
+
+### ✅ Authentication & Security
+
+- User registration, login, and logout.
+- **Advanced session management** using **JWT** for secure user sessions.
+
+### 📧 Email-Based Features
+
+- **Email verification** to ensure valid accounts.
+- **Forgot password** functionality with secure email links.
+
+### 🔗 URL Management
+
+- Add a **title** for each link.
+- Provide the **original URL**.
+- Option to create a **custom sub-URI name** for branding or easy recall.
+
+### 📊 Analytics & Insights
+
+- View **total clicks** for each shortened link.
+- Track **last visited** date and time.
+- **Modern interactive charts** for link performance visualization.
+- **QR code generation and scanning** for instant sharing.
+
+### 🗂️ Data Presentation
+
+- Links displayed in a **modern tabular layout**.
+- Built-in **search functionality**.
+- **Pagination** for better data handling.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+- **React 19** & **Next.js 15**
+- **TypeScript**
+- **Tailwind CSS** + **shadcn/ui**
+- **React Query** (data fetching & caching)
+- **Cloudinary** (image hosting)
+- **Zod** & **react-hook-form** (form validation & management)
+- **Resend** (email sending)
+- **Recharts** (analytics charts)
+- **qr-code-styling** (QR code generation)
+
+### Backend
+
+- **Next.js API Routes** (serverless functions)
+- **MongoDB** & **Mongoose** (database & ORM)
+- **JWT** (authentication)
+- **bcrypt** (password hashing)
+- **nodemailer** (email handling)
+- **nanoid** (unique ID generation)
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the Repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Subhojit98/fullstack-url-shortner.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+cd fullstack-url-shortner
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+pnpm i # or npm install
+pnpm dev # or npm run dev
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```

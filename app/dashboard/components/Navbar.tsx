@@ -4,7 +4,7 @@ import logo from "@/app/assets/images/logo-1.png"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { logoutUser } from "@/data/allQueryRequest"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { LogOut } from "lucide-react"
 import Image from "next/image"
@@ -30,6 +30,7 @@ const getShortName = (name: string) => {
 }
 const Navbar = () => {
 
+    const queryClient = useQueryClient();
     const router = useRouter()
     const { user } = useAppContext()
     const mutation = useMutation({
@@ -40,9 +41,18 @@ const Navbar = () => {
         mutation.mutate(undefined, {
             onSuccess: (data) => {
                 if (data.success) {
+                    queryClient.invalidateQueries({
+                        queryKey: ["me", "linkAnalytics"],
+                    })
                     router.push("/login")
                     router.refresh()
+                    toast.success("Logged out successfully!", {
+                        position: "top-right",
+                    })
+
                 }
+
+
             },
             onError: (error: unknown) => {
                 console.log(error instanceof Error ? error.message : error);
