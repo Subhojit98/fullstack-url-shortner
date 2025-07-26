@@ -1,6 +1,8 @@
 # Shortyfy – Advanced URL Shortener
 
-Shortyfy is a **full-stack advanced URL shortener** application that goes beyond basic link shortening. It provides robust authentication, email verification, custom links, analytics, and modern UI for a seamless user experience.
+Shortyfy is a **full-stack** advanced **URL shortener** that combines **link management** with **authentication**, **email verification**, and **analytics**. It allows users to create custom short links with titles, track total clicks, view last visit data, generate QR codes, and visualize performance through interactive charts.
+
+The application features secure session handling with JWT, password management via email links, and a modern UI that supports search, pagination, and responsive tables. Built with React 19, Next.js 15, TypeScript, TailwindCSS, shadcn, and MongoDB, Shortyfy provides a scalable and user-friendly solution for managing and analyzing URLs efficiently.
 
 ---
 
@@ -69,12 +71,12 @@ Shortyfy is a **full-stack advanced URL shortener** application that goes beyond
 ```bash
 git clone https://github.com/Subhojit98/fullstack-url-shortner.git
 ```
-
+```bash
 cd fullstack-url-shortner
-
-pnpm i # or npm install
-pnpm dev # or npm run dev
-
 ```
-
+```bash
+pnpm i # or npm install
+```
+```bash
+pnpm dev # or npm run dev
 ```
