@@ -1,28 +1,36 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Copy, Eye, Download } from "lucide-react"
+import { Copy, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import testQrImage from "@/app/assets/images/qr_image.png"
-import Image from "next/image"
-export type Payment = {
-    id: string
-    qrCode: string
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { toast } from "sonner"
+import { formatDate } from "@/helper/dateFormater"
+
+export type Link = {
+    _id: string
     title: string
-    url: string
+    shortId: string
+    originalUrl: string
     createdAt: string,
     actions?: string
 }
 
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Link>[] = [
     {
-        accessorKey: "qrCode",
-        header: "QR Code",
+        accessorKey: "no",
+        header: "NO.",
         cell: ({ row }) => {
             return (
-                <div className="flex items-center ml-6">
-                    <Image src={testQrImage} alt="QR Code" className="w-10 h-10" />
+                <div className="flex items-center ml-8">
+                    <span className="text-sm font-semibold">
+                        {row.index + 1}
+                    </span>
                 </div>
             );
         },
@@ -32,25 +40,32 @@ export const columns: ColumnDef<Payment>[] = [
         header: "Title",
         cell: ({ row }) => {
             return (
-                <Link href={""} className="hover:underline">
+                <Link href={`/dashboard/analytics/${row.original._id}`} className="hover:underline">
                     {row.getValue("title")}
                 </Link>
             );
         },
     },
     {
-        accessorKey: "url",
+        accessorKey: "newUrl",
         header: () => {
             return (
-                <div className="">
-                    URL
+                <div className="ml-9">
+                    new url
                 </div>
             )
         },
         cell: ({ row }) => {
             return (
                 <div className="">
-                    {row.getValue("url")}
+                    <Tooltip>
+                        <TooltipTrigger>
+                            {`${process.env.NEXT_PUBLIC_DOMAIN}/api/links/redirect-link/${row.original.shortId}`.split("").slice(0, 30).join("")}...
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            {`${process.env.NEXT_PUBLIC_DOMAIN}/api/links/redirect-link/${row.original.shortId}`}
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
             );
         },
@@ -67,7 +82,7 @@ export const columns: ColumnDef<Payment>[] = [
         cell: ({ row }) => {
             return (
                 <div className=" ml-7 text-center">
-                    {new Date(row.getValue("createdAt")).toLocaleDateString()}
+                    {formatDate(row.original.createdAt)}
                 </div>
             );
         },
@@ -83,20 +98,42 @@ export const columns: ColumnDef<Payment>[] = [
         },
         cell: ({ row }) => {
 
-            return (
-                <div className="flex gap-3 justify-end mr-10">
-                    <Button variant="outline" size="sm" className="cursor-pointer bg-green-500">
-                        <Copy />
-                    </Button>
-                    <Button variant="outline" size="sm" className="cursor-pointer bg-gray-600">
-                        <Download />
-                    </Button>
+            const handleCopy = async () => {
+                await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_DOMAIN}/api/links/redirect-link/${row.original.shortId}`);
+                toast.success("URL copied to clipboard!", {
+                    position: "top-right",
+                    duration: 800
+                });
 
-                    <Link href={`/payments/${row.id}`} className="">
-                        <Button variant="outline" size="sm" className="cursor-pointer bg-blue-600">
-                            <Eye />
-                        </Button>
-                    </Link>
+            }
+            return (
+                <div className="flex gap-3 justify-end mr-16">
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button onClick={handleCopy} variant="outline" size="sm" className="cursor-pointer bg-slate-100 hover:bg-slate-200">
+                                <Copy className="text-black" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Copy Url</p>
+                        </TooltipContent>
+                    </Tooltip>
+
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Link href={`/dashboard/analytics/${row.original._id}`} className="">
+                                <Button variant="outline" size="sm" className="cursor-pointer bg-slate-100 hover:bg-slate-200">
+                                    <Eye className="text-black" />
+                                </Button>
+                            </Link>
+
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Preview</p>
+                        </TooltipContent>
+                    </Tooltip>
+
+
                 </div>
             );
         },

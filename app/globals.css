@@ -138,3 +138,8 @@
 .gradient-2 {
   background: linear-gradient(120deg, #3b47e0 29% 29%, #9c9ef0 52% 52%, #3b47e0 90% 90%);
 }
+
+.hollow_text {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

@@ -28,7 +28,7 @@ const userModel = new Schema({
     createdLinks: [
         {
             type: Schema.Types.ObjectId,
-            ref: "Link"
+            ref: "customLink"
         }
     ],
 
@@ -36,7 +36,8 @@ const userModel = new Schema({
     forgotPasswordTokenExpiry: Date,
 
     verifyToken: String,
-    verifyTokenExpiry: Date
+    verifyTokenExpiry: Date,
+    refreshToken: String
 }, {
     timestamps: true,
 })

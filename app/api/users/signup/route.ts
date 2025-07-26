@@ -7,8 +7,8 @@ import { NextResponse, NextRequest } from "next/server";
 import path from "path";
 import User from "@/models/user.model";
 import bcrypt from "bcryptjs";
+import generateAccessTokenAndRefreshToken from "@/helper/generateTokens";
 import sendEmail from "@/helper/mailer";
-import jwt from "jsonwebtoken";
 
 // ? connect with database
 
@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
 		});
 
 		const newUser = await User.findById(createdUser._id).select(
-			"-password -verifyToken -verifyTokenExpiry"
+			"-password -verifyToken -verifyTokenExpiry -refreshToken -forgotPasswordToken -forgotPasswordTokenExpiry"
 		);
 
 		if (!newUser) {
@@ -109,15 +109,9 @@ export async function POST(req: NextRequest) {
 			userId: newUser._id,
 		});
 
-		const jwtTokenData = {
-			userId: newUser._id,
-		};
-
-		const jwtToken = jwt.sign(jwtTokenData, process.env.JWT_SECRET!, {
-			expiresIn: "1d",
-		});
-
-		if (!jwtToken) {
+		const { accessToken, refreshToken } =
+			await generateAccessTokenAndRefreshToken(newUser._id);
+		if (!accessToken || !refreshToken) {
 			return NextResponse.json(
 				{ message: "Error while creating JWT token!!" },
 				{
@@ -137,14 +131,22 @@ export async function POST(req: NextRequest) {
 			}
 		);
 
-		response.cookies.set("accessToken", jwtToken, {
+		response.cookies.set("accessToken", accessToken, {
 			httpOnly: true,
+			expires: new Date(Date.now() + 60 * 60 * 24 * 1000), // 1 day
+			path: "/",
+		});
+		response.cookies.set("refreshToken", refreshToken, {
+			httpOnly: true,
+			expires: new Date(Date.now() + 60 * 60 * 24 * 7 * 1000), // 7 days
+			path: "/",
 		});
 
 		return response;
-	} catch (error: any) {
+	} catch (error: unknown) {
+		console.log(error instanceof Error ? error.message : error);
 		return NextResponse.json(
-			{ message: error.message },
+			{ message: error instanceof Error ? error.message : "Unknown error" },
 			{
 				status: 500,
 			}

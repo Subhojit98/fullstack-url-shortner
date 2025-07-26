@@ -45,9 +45,13 @@ export async function POST(request: NextRequest) {
 				status: 201,
 			}
 		);
-	} catch (error: any) {
+	} catch (error: unknown) {
+		console.log(error instanceof Error ? error.message : error);
 		return NextResponse.json(
-			{ message: `verification error:${error.message}`, success: false },
+			{
+				message: `verification error:${error instanceof Error ? error.message : "Unknown error"}`,
+				success: false,
+			},
 			{
 				status: 500,
 			}

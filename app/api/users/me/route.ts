@@ -2,16 +2,28 @@ import connectDb from "@/db/dbConfig";
 import { getTokenData } from "@/helper/getTokenData";
 import User from "@/models/user.model";
 import { NextResponse, NextRequest } from "next/server";
-
+import "@/models/link.model";
 connectDb();
 
 export async function GET(request: NextRequest) {
 	try {
 		const userId = await getTokenData(request);
 
-		const user = await User.findById(userId).select(
-			"-password -forgotPasswordToken -forgotPasswordTokenExpiry -verifyToken -verifyTokenExpiry"
-		);
+		if (!userId) {
+			return NextResponse.json(
+				{ message: "Not logged in", data: null, success: false },
+				{ status: 401 }
+			);
+		}
+
+		const user = await User.findById(userId)
+			.select(
+				"-password -forgotPasswordToken -forgotPasswordTokenExpiry -verifyToken -verifyTokenExpiry"
+			)
+			.populate({
+				path: "createdLinks",
+				select: "-locations -devices -lastVisited",
+			});
 
 		if (!user) {
 			return NextResponse.json(
@@ -32,8 +44,8 @@ export async function GET(request: NextRequest) {
 				status: 200,
 			}
 		);
-	} catch (error: any) {
-		console.log("error while fetching user info:", error.message || error);
+	} catch (error: unknown) {
+		console.log(error instanceof Error ? error.message : error);
 		return NextResponse.json(
 			{
 				message: "unauthorized user access!",

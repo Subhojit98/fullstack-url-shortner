@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDb from "@/db/dbConfig";
 import User from "@/models/user.model";
 import { isValidEmailAddress } from "@/helper/emailValidator";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import generateAccessTokenAndRefreshToken from "@/helper/generateTokens";
 connectDb();
 
 export async function POST(request: NextRequest) {
@@ -53,13 +53,24 @@ export async function POST(request: NextRequest) {
 			);
 		}
 
-		const jwtTokenData = {
-			userId: user._id,
-		};
+		// const jwtTokenData = {
+		// 	userId: user._id,
+		// };
 
-		const jwtToken = jwt.sign(jwtTokenData, process.env.JWT_SECRET!, {
-			expiresIn: "1d",
-		});
+		// const jwtToken = jwt.sign(jwtTokenData, process.env.JWT_SECRET!, {
+		// 	expiresIn: "1d",
+		// });
+		const { accessToken, refreshToken } =
+			await generateAccessTokenAndRefreshToken(user._id);
+
+		if (!accessToken || !refreshToken) {
+			return NextResponse.json(
+				{ message: "Error while creating JWT token!!" },
+				{
+					status: 500,
+				}
+			);
+		}
 
 		const response = NextResponse.json(
 			{ message: "user logged in successfully!", success: true },
@@ -68,9 +79,20 @@ export async function POST(request: NextRequest) {
 			}
 		);
 
-		response.cookies.set("accessToken", jwtToken, {
+		response.cookies.set("accessToken", accessToken, {
 			httpOnly: true,
-			// expires: ""
+			expires: new Date(Date.now() + 60 * 60 * 72 * 1000), // 3 days
+			sameSite: "lax",
+			// secure: process.env.NODE_ENV === "production",
+			path: "/",
+		});
+
+		response.cookies.set("refreshToken", refreshToken, {
+			httpOnly: true,
+			expires: new Date(Date.now() + 60 * 60 * 24 * 7 * 1000), // 7 days
+			sameSite: "lax",
+			// secure: process.env.NODE_ENV === "production",
+			path: "/",
 		});
 
 		return response;

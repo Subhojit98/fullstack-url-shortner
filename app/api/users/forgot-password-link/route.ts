@@ -44,8 +44,8 @@ export async function POST(request: NextRequest) {
 				status: 201,
 			}
 		);
-	} catch (error: any) {
-		console.log("reset-password error: ", error.message || error);
+	} catch (error: unknown) {
+		console.log(error instanceof Error ? error.message : error);
 		return NextResponse.json(
 			{
 				message: "Error while sending reset-password link!",

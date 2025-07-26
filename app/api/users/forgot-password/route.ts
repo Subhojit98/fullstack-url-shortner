@@ -7,7 +7,9 @@ connectDb();
 
 export async function POST(request: NextRequest) {
 	try {
-		const { token, password } = await request.json();
+		const requestBody = await request.json();
+
+		const { token, newPassword } = requestBody;
 
 		if (!token) {
 			return NextResponse.json(
@@ -34,7 +36,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		const salt = await bcrypt.genSalt(10);
-		const hashedPassword = await bcrypt.hash(password, salt);
+		const hashedPassword = await bcrypt.hash(newPassword, salt);
 
 		user.password = hashedPassword;
 		user.forgotPasswordToken = undefined;
@@ -43,13 +45,17 @@ export async function POST(request: NextRequest) {
 		await user.save();
 
 		return NextResponse.json(
-			{ message: "password changed successfully.", success: true },
+			{
+				message: "password changed successfully.",
+				success: true,
+				redirect: true,
+			},
 			{
 				status: 201,
 			}
 		);
-	} catch (error: any) {
-		console.log("password change error:", error.message || error);
+	} catch (error: unknown) {
+		console.log(error instanceof Error ? error.message : error);
 		return NextResponse.json(
 			{ message: "error while changing password", success: false },
 			{
