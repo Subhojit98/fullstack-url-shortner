@@ -35,8 +35,7 @@ export default function RestPasswordForm() {
 
         const email = data?.email.trim()
         mutation.mutate(email, {
-            onSuccess: (response) => {
-                console.log(response)
+            onSuccess: () => {
                 toast.success("Reset password link sent successfully!")
             },
             onError: (error) => {

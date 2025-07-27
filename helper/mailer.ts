@@ -17,7 +17,7 @@ const generateHtmlResponse = (emailType: string, token: string) => {
 	} else
 		return `<p>Hey There To Rest Your Password please link on the link below and if will redirect you to the rest-password page.</p>
     <br>
-    <a href="${process.env.NEXT_PUBLIC_DOMAIN}/reset-password?token=${token}">Verify Email</a>
+    <a target="_blank" href="${process.env.NEXT_PUBLIC_DOMAIN}/reset-password?token=${token}">Verify Email</a>
     <p>or just copy and paste the following link into your browser:</p>
     <p>${process.env.NEXT_PUBLIC_DOMAIN}/reset-password?token=${token}</p>`;
 };
