@@ -79,6 +79,7 @@ export function LoginForm({
       onSettled: () => {
         reset()
         setShowPassword(false)
+        toast.dismiss(loadingToast)
       }
     })
   }

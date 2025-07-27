@@ -1,2 +1,2 @@
-const publicPaths = ["/login", "/signup", "/reset-password-form"];
+const publicPaths = ["/login", "/signup"];
 export default publicPaths;
