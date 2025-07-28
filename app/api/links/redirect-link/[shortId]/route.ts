@@ -60,25 +60,30 @@ export async function GET(
 		link.totalClicks += 1;
 		link.lastVisited = new Date();
 
-		// ? setting the device info
-		const isExistedDevice = link.devices.find(
-			(device: { name: string; count: number }) => device.name === deviceType
+		const existingDevice = link.devices.find(
+			(d: { name: string; count: number }) => d.name === deviceType
 		);
-
-		if (isExistedDevice) {
-			isExistedDevice.count += 1;
+		if (existingDevice) {
+			existingDevice.count += 1;
 		} else {
 			link.devices.push({ name: deviceType, count: 1 });
 		}
 
-		// ? setting the ip info
+		// ? setting the device info
+		if (userLocationInfo) {
+			const city = userLocationInfo.city || "Unknown City";
+			const country = userLocationInfo.country || "Unknown Country";
+			const regionKey = `${city}, ${country}`;
 
-		const isTrackedIp = link.locations.find(
-			(loc: { info: { ip: string } }) => loc.info.ip === userIp
-		);
+			const existingRegion = link.locations.find(
+				(loc: { name: string; count: number }) => loc.name === regionKey
+			);
 
-		if (!isTrackedIp && userLocationInfo?.ip) {
-			link.locations.push({ info: userLocationInfo, count: 1 });
+			if (existingRegion) {
+				existingRegion.count += 1;
+			} else {
+				link.locations.push({ name: regionKey, count: 1 });
+			}
 		}
 
 		await link.save();
