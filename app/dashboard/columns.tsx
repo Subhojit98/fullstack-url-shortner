@@ -60,10 +60,10 @@ export const columns: ColumnDef<Link>[] = [
                 <div className="">
                     <Tooltip>
                         <TooltipTrigger>
-                            {`${process.env.NEXT_PUBLIC_DOMAIN}/api/links/redirect-link/${row.original.shortId}`.split("").slice(0, 30).join("")}...
+                            {`${process.env.NEXT_PUBLIC_DOMAIN}/${row.original.shortId}`.split("").slice(0, 30).join("")}...
                         </TooltipTrigger>
                         <TooltipContent>
-                            {`${process.env.NEXT_PUBLIC_DOMAIN}/api/links/redirect-link/${row.original.shortId}`}
+                            {`${process.env.NEXT_PUBLIC_DOMAIN}/${row.original.shortId}`}
                         </TooltipContent>
                     </Tooltip>
                 </div>
@@ -99,7 +99,7 @@ export const columns: ColumnDef<Link>[] = [
         cell: ({ row }) => {
 
             const handleCopy = async () => {
-                await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_DOMAIN}/api/links/redirect-link/${row.original.shortId}`);
+                await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_DOMAIN}/${row.original.shortId}`);
                 toast.success("URL copied to clipboard!", {
                     position: "top-right",
                     duration: 800

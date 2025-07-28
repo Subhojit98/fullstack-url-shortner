@@ -1,8 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-
+	async rewrites() {
+		return [
+			{
+				source: "/:shortId",
+				destination: "/api/links/redirect-link/:shortId",
+			},
+		];
+	},
 };
 
 export default nextConfig;
