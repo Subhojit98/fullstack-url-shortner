@@ -54,6 +54,8 @@ export async function GET(
 		const ua = request.headers.get("user-agent") || "";
 		const parser = new UAParser(ua);
 		const deviceType = parser.getDevice().type || "desktop";
+		const city = userLocationInfo?.city.trim() || "Unknown";
+		const country = userLocationInfo?.country.trim() || "Unknown";
 
 		//? setting the clicks and date info
 
@@ -71,16 +73,23 @@ export async function GET(
 			link.devices.push({ name: deviceType, count: 1 });
 		}
 
-		// ? setting the ip info
+		// ? setting the location info via city and country
 
-		const isTrackedIp = link.locations.find(
-			(loc: { info: { ip: string } }) => loc.info.ip === userIp
+		const isExistedLocation = link.locations.find(
+			(loc: { info: { city: string; country: string } }) =>
+				loc.info.city.trim() === city && loc.info.country.trim() === country
 		);
 
-		if (!isTrackedIp && userLocationInfo?.ip) {
-			link.locations.push({ info: userLocationInfo, count: 1 });
+		if (isExistedLocation) {
+			isExistedLocation.count += 1;
+		} else {
+			link.locations.push({
+				info: { city, country, ...userLocationInfo },
+				count: 1,
+			});
 		}
 
+		link.markModified("locations");
 		await link.save();
 
 		return NextResponse.redirect(link.originalUrl, 302);

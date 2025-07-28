@@ -27,7 +27,7 @@ type PropsType = {
             locations: Array<{
                 info: {
                     city: string,
-                    region: string,
+                    country: string,
                 },
                 count: number,
             }>,
@@ -45,9 +45,9 @@ const chartConfig = {
 export function ChartLineInteractive({ data }: PropsType) {
 
     const chartData = React.useMemo(() => {
-        const forMattedData = data?.data.locations.map((loc: { info: { city: string; region: string }; count: number }) => {
+        const forMattedData = data?.data.locations.map((loc: { info: { city: string; country: string }; count: number }) => {
             return {
-                location: `${loc.info.city}, ${loc.info.region}`,
+                location: `${loc.info.city} (${loc.info.country})`,
                 clicks: loc.count,
             }
         })
@@ -66,11 +66,12 @@ export function ChartLineInteractive({ data }: PropsType) {
                     </CardDescription>
                 </div>
             </CardHeader>
-            <CardContent className="px-2 sm:p-6">
+
+            <CardContent className="px-2 sm:p-8">
                 {
                     chartData.length > 0 ? <ChartContainer
                         config={chartConfig}
-                        className="aspect-auto h-[400px] w-full "
+                        className="aspect-auto h-[450px] w-full "
                     >
                         <LineChart data={chartData} >
                             <CartesianGrid vertical={false} />
@@ -96,11 +97,11 @@ export function ChartLineInteractive({ data }: PropsType) {
                                 dataKey="clicks"
                                 type="monotone"
                                 stroke={`#3b47e0`}
-                                strokeWidth={4}
+                                strokeWidth={3}
                                 dot={false}
                                 activeDot={{
                                     r: 6,
-                                    stroke: "#3b47e0",
+                                    stroke: "#ffffff",
                                     strokeWidth: 2,
                                 }}
                             />
