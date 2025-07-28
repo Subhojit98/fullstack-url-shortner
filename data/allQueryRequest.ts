@@ -80,7 +80,7 @@ const getUserLocationInfo = async (ip: string) => {
 			.data;
 		return res;
 	} catch (error: any) {
-		console.error("GeoIP error:", error);
+		console.error("ipapi error:", error);
 		throw new Error(error.message || error);
 	}
 };
