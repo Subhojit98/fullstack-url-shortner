@@ -63,13 +63,13 @@ const Navbar = () => {
 
     return (
         <nav className="flex items-center justify-between w-full px-6 md:px-20 mt-5">
-            <button className="w-28 h-28 cursor-pointer" onClick={() => window.location.reload()}>
+            <button className=" w-24 h-24 md:w-28 md:h-28 cursor-pointer" onClick={() => window.location.reload()}>
                 <Image src={logo} alt="logo" className="object-cover" />
             </button>
             <Menubar>
                 <MenubarMenu>
                     <MenubarTrigger>
-                        <Avatar className="size-14 cursor-pointer">
+                        <Avatar className="size-11 sm:size-14 cursor-pointer">
                             <AvatarImage src={`${user?.avatar || ""}`} />
 
                             {

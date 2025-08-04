@@ -40,7 +40,7 @@ export const columns: ColumnDef<Link>[] = [
         header: "Title",
         cell: ({ row }) => {
             return (
-                <Link href={`/dashboard/analytics/${row.original._id}`} className="hover:underline">
+                <Link href={`/dashboard/analytics/${row.original._id}`} className="hover:underline font-semibold">
                     {row.getValue("title")}
                 </Link>
             );
@@ -57,9 +57,9 @@ export const columns: ColumnDef<Link>[] = [
         },
         cell: ({ row }) => {
             return (
-                <div className="">
+                <div>
                     <Tooltip>
-                        <TooltipTrigger>
+                        <TooltipTrigger >
                             {`${process.env.NEXT_PUBLIC_DOMAIN}/${row.original.shortId}`.split("").slice(0, 30).join("")}...
                         </TooltipTrigger>
                         <TooltipContent>
@@ -107,7 +107,7 @@ export const columns: ColumnDef<Link>[] = [
 
             }
             return (
-                <div className="flex gap-3 justify-end mr-16">
+                <div className="flex gap-5 justify-end mr-16">
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Button onClick={handleCopy} variant="outline" size="sm" className="cursor-pointer bg-slate-100 hover:bg-slate-200">
@@ -121,9 +121,9 @@ export const columns: ColumnDef<Link>[] = [
 
                     <Tooltip>
                         <TooltipTrigger asChild>
-                            <Link href={`/dashboard/analytics/${row.original._id}`} className="">
-                                <Button variant="outline" size="sm" className="cursor-pointer bg-slate-100 hover:bg-slate-200">
-                                    <Eye className="text-black" />
+                            <Link href={`/dashboard/analytics/${row.original._id}`}>
+                                <Button variant="outline" size="sm" className="gradient-1 cursor-pointer hover:opacity-60">
+                                    <Eye className="text-white" />
                                 </Button>
                             </Link>
 
