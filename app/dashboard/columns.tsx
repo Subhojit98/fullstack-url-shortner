@@ -1,16 +1,14 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Copy, Eye } from "lucide-react"
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { toast } from "sonner"
 import { formatDate } from "@/helper/dateFormater"
+import ActionCalls from "./components/ActionCalls"
 
 export type Link = {
     _id: string
@@ -59,7 +57,7 @@ export const columns: ColumnDef<Link>[] = [
             return (
                 <div>
                     <Tooltip>
-                        <TooltipTrigger >
+                        <TooltipTrigger>
                             {`${process.env.NEXT_PUBLIC_DOMAIN}/${row.original.shortId}`.split("").slice(0, 30).join("")}...
                         </TooltipTrigger>
                         <TooltipContent>
@@ -97,45 +95,8 @@ export const columns: ColumnDef<Link>[] = [
             )
         },
         cell: ({ row }) => {
+            return <ActionCalls id={row.original._id} shortId={row.original.shortId} />;
 
-            const handleCopy = async () => {
-                await navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_DOMAIN}/${row.original.shortId}`);
-                toast.success("URL copied to clipboard!", {
-                    position: "top-right",
-                    duration: 800
-                });
-
-            }
-            return (
-                <div className="flex gap-5 justify-end mr-16">
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Button onClick={handleCopy} variant="outline" size="sm" className="cursor-pointer bg-slate-100 hover:bg-slate-200">
-                                <Copy className="text-black" />
-                            </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Copy Url</p>
-                        </TooltipContent>
-                    </Tooltip>
-
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Link href={`/dashboard/analytics/${row.original._id}`}>
-                                <Button variant="outline" size="sm" className="gradient-1 cursor-pointer hover:opacity-60">
-                                    <Eye className="text-white" />
-                                </Button>
-                            </Link>
-
-                        </TooltipTrigger>
-                        <TooltipContent>
-                            <p>Preview</p>
-                        </TooltipContent>
-                    </Tooltip>
-
-
-                </div>
-            );
         },
     },
 

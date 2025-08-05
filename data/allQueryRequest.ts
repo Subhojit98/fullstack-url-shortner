@@ -74,6 +74,19 @@ const createCustomLink = async (linkData: {}) => {
 	}
 };
 
+const deleteCustomLink = async (linkId: string) => {
+	try {
+		const res = await axios.delete(`/api/links/delete-link`, {
+			data: {
+				id: linkId,
+			},
+		});
+		return res;
+	} catch (error: any) {
+		throw new Error(error.message || error);
+	}
+};
+
 const getUserLocationInfo = async (ip: string) => {
 	try {
 		const res = (await axios.get(`${process.env.IPAPI_DOMAIN}/${ip}/json`))
@@ -106,4 +119,5 @@ export {
 	getUserLocationInfo,
 	createCustomLink,
 	getLinkDetails,
+	deleteCustomLink,
 };
