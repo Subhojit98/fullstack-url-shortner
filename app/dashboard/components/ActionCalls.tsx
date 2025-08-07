@@ -2,6 +2,17 @@
 import { deleteCustomLink } from "@/data/allQueryRequest";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Copy, Eye, Trash2 } from "lucide-react"
 
 import {
@@ -61,17 +72,6 @@ const ActionCalls = ({ id, shortId }: ActionsCellProps) => {
         <div className="flex gap-5 justify-end mr-16">
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <Button onClick={handleCopy} variant="outline" size="sm" className="cursor-pointer bg-green-100 hover:bg-green-200">
-                        <Copy className="text-green-700 hover:text-green-800" />
-                    </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                    <p>Copy Url</p>
-                </TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-                <TooltipTrigger asChild>
                     <Link href={`/dashboard/analytics/${id}`}>
                         <Button variant="outline" size="sm" className="cursor-pointer bg-indigo-100 hover:bg-indigo-200">
                             <Eye className="text-indigo-700 hover:text-indigo-800" />
@@ -83,12 +83,41 @@ const ActionCalls = ({ id, shortId }: ActionsCellProps) => {
                     <p>Preview</p>
                 </TooltipContent>
             </Tooltip>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button onClick={handleCopy} variant="outline" size="sm" className="cursor-pointer bg-green-100 hover:bg-green-200">
+                        <Copy className="text-green-700 hover:text-green-800" />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>Copy Url</p>
+                </TooltipContent>
+            </Tooltip>
+
 
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <Button variant="outline" size="sm" className="cursor-pointer bg-red-100 hover:bg-red-200" onClick={() => handleDelete(id)}>
-                        <Trash2 className="text-red-700 hover:text-red-800" />
-                    </Button>
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button variant="outline" size="sm" className="cursor-pointer bg-red-100 hover:bg-red-200">
+                                <Trash2 className="text-red-700 hover:text-red-800" />
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="bg-slate-50">
+                            <AlertDialogHeader>
+                                <AlertDialogTitle className="text-xl">Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete your Link.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel className="cursor-pointer text-white border-none hover:text-white bg-red-600 hover:bg-red-500">Cancel</AlertDialogCancel>
+                                <AlertDialogAction className="cursor-pointer" onClick={() => handleDelete(id)}>
+                                    Continue
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
 
                 </TooltipTrigger>
                 <TooltipContent>
