@@ -14,7 +14,7 @@ import Loader from "@/app/components/Loading"
 import { nanoid } from "nanoid"
 import { toast } from "sonner"
 
-function formatTimeFromISOString(isoString: string): string {
+export function formatTimeFromISOString(isoString: string): string {
     const date = new Date(isoString);
     let hours = date.getHours();
     const minutes = date.getMinutes();
@@ -38,6 +38,8 @@ const Page = () => {
         queryKey: ["linkAnalytics", linkId],
         queryFn: () => getLinkDetails(linkId as string),
     })
+
+    const lastAccessedFrom = data?.data?.locations[data?.data?.locations.length - 1] || "Unknown";
     const qrRef = useRef<HTMLDivElement>(null);
     const qrInstance = useRef<QRCodeStyling | null>(null);
 
@@ -127,9 +129,9 @@ const Page = () => {
                                 <p className="text-2xl md:text-4xl ml-20 font-bold mt-2">{data?.data.totalClicks}</p>
                                 <h2 className="text-xl inline-flex items-center gap-3 text-slate-100 mt-5">
                                     <CalendarClock size={22} className="text-amber-300" />
-                                    Last Visited At
+                                    Last Visited Info
                                 </h2>
-                                <ul className="text-muted-foreground flex items-center mt-5 gap-x-20 lg:gap-12 xl:gap-24 2xl:gap-x-40">
+                                <ul className="text-muted-foreground grid grid-cols-2 2xl:grid-cols-3 mt-5">
                                     <li className="flex-col flex gap-3">
                                         <span className="text-xs md:text-sm">Date</span>
                                         <span className="text-white font-semibold text-sm md:text-base"> {data.data.lastVisited ? formatDate(data?.data.lastVisited) : <span className="text-amber-500 inline-flex items-center gap-2 font-normal"> <TriangleAlert size={15} /> Not visited yet</span>}</span>
@@ -138,7 +140,13 @@ const Page = () => {
                                         <span className="text-xs md:text-sm">Time</span>
                                         <span className="text-white font-semibold text-sm md:text-base"> {data.data.lastVisited ? formatTimeFromISOString(data?.data.lastVisited) : <span className="text-amber-500 inline-flex items-center gap-2 font-normal"> <TriangleAlert size={15} /> Not visited yet</span>}</span>
                                     </li>
+                                    <li className="flex-col flex gap-3 mt-5 2xl:mt-0">
+                                        <span className="text-xs md:text-sm">From</span>
+                                        <span className="text-white font-semibold text-sm md:text-base"> {data.data.lastVisited ? `${lastAccessedFrom?.info.city} (${lastAccessedFrom?.info.country})` : <span className="text-amber-500 inline-flex items-center gap-2 font-normal"> <TriangleAlert size={15} /> Not visited yet</span>}</span>
+                                    </li>
                                 </ul>
+
+
                             </div>
                             {data?.data?.shortId && (
                                 <div className="pb-6 lg:pb-3 pt-5 rounded-lg flex flex-col items-center backdrop-blur-md bg-white/5 border border-white/20 shadow-lg text-white">
@@ -171,3 +179,5 @@ const Page = () => {
 }
 
 export default Page
+
+// 
