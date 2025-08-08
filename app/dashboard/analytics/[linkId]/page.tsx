@@ -14,7 +14,7 @@ import Loader from "@/app/components/Loading"
 import { nanoid } from "nanoid"
 import { toast } from "sonner"
 
-export function formatTimeFromISOString(isoString: string): string {
+function formatTimeFromISOString(isoString: string): string {
     const date = new Date(isoString);
     let hours = date.getHours();
     const minutes = date.getMinutes();
